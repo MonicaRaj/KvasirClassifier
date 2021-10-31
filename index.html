@@ -1,39 +1,207 @@
-<!doctype html>
-<html>
+<!DOCTYPE html> 
 <head>
-
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
-	<title>Image classification using tensorflow.js</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+  <title> Kvasir-Capusle Dataset </title>
+  <link rel="icon" type="image/png" href="static/images/FAULogo.png" />
+  
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="static/index.js"></script>
-	
-</head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="static/index.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <script src="https://kit.fontawesome.com/a6e2755b4d.js" 
+          crossorigin="anonymous">
+  </script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" 
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+    crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
+    crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
+    crossorigin="anonymous"></script>
+
+	<!-- Chartist -->
+	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"> </script> -->
+    
+  <link rel="stylesheet" href="static/index.css" />
+
+  </head>
 
 <body>
-	<div class="container mt-5">
-		<div class="row">
-			<div class="col-6">
-				<input id="image-selector" class="form-control border-0" type="file" onchange="PreviewImage();"/>
-			</div>
-			<div class="col-6">
-				<button id="predict-button" class="btn btn-dark float-right" onclick="getPred()">Predict</button>
-			</div>
-		</div>
-		<hr>
-		<div class="row">
-			<div class="col-6">
-				<h2 class="ml-3">Image</h2>
-				<img id="selected-image" style="width:250px; height:250px;" class="ml-3" />
-			</div>
-			<div class="col-6">
-				<h2 class="ml-3">Top 5 Predictions</h2>
-				<ol id="prediction-list"></ol>
-			</div>
-		</div>
-	</div>   
+
+<div class="wholeApp">
+  <div id="loading">
+    <img id="loading-image" src="static/images/loading.gif" alt="Loading..." />
+  </div>
+
+<div class="header">
+  <a href="https://www.fau.edu" target="_blank"><img src="static/images/FAULogo.png" style="width: 70px;
+  float: left;
+  margin-left: 10px;"></a>
+   <h4 style="margin: 10px;">Image Classification for Kvasir-Capusle Dataset
+     <i id="about" class="fas fa-info-circle"  style="float: right;
+     margin-right: 20px; cursor: pointer; font-size: larger;" 
+     data-toggle="modal" data-target="#aboutModal" title="About"></i>
+    </h4>
+ </div>
+
+<div class="splitter" > 
+  <div id="first">
+    <div id="appContainer" style="display: flex;
+    align-items: center;
+    justify-content: center; margin-top: 10px;">
+            <input id="image-selector" class="form-control border-0" type="file" onchange="PreviewImage();"/>
+            <label for="image-selector" class="custom-file-upload">
+            <i class="fa fa-cloud-upload"></i> Custom Upload
+        </label>
+        
+        <p>or choose from samples</p>
+
+        <select id="field_value" class="form-select" aria-label="Default select example">
+            <option value="0" selected>Choose sample image</option>
+            <option 
+            value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Ampulla%20of%20Vater.jpg">
+            Ampulla of vater</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Angiectasia.jpg">
+            Angiectasia</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Blood-Fresh.jpg">Blood-Fresh</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Blood-Hematin.jpg">Blood-Hematin</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Erosion.jpg">Erosion</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Erythema.jpg">Erythema</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Foreign%20body.jpg">Foreign body</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Ileocecal%20valve.jpg">Ileocecal valve</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Lymphangiectasia.jpg">Lymphangiectasia</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Normal%20clean%20mucosa.jpg">Normal clean mucosa</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Polyp.jpg">Polyp</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Pylorus.jpg">Pylorus</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Reduced%20mucosal%20view.jpg">Reduced mucosal view</option>
+            <option value="https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/images/Ulcer.jpg">Ulcer</option>
+          </select>
+
+          <div id="imageDiv" style="display: none;">
+            <h2 class="ml-3" style="margin-top: 50px;">Chosen Image</h2>
+            <br>
+            <img id="selected-image" style="width:250px; height:250px;" class="ml-3" />
+          </div>
+      </div>
+  </div>
+
+    <div id="separator" ></div>
+
+    <div id="second" style="overflow: auto;">
+      <h2>Prediction Results</h2>
+      <p>Top 5 predictions</p>
+      <div>
+        <button id="predict-button" class="btn btn-secondary">Predict</button>
+        <ol id="prediction-list"></ol>
+
+        <div id="prediction-list-div" style="margin: 5%; padding: 10px;">
+
+          <!-- <div class="row">
+            <div class="col-4">
+              Ampulla of Vater  
+            </div>
+              <div class="progress" style="width: 50%;">  
+                <div class="progress-bar bg-success" role="progressbar" style="width: 25%">25%</div>
+              </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-4">
+              Angiectasia
+            </div>
+            <div class="progress" style="width: 50%;">
+              <div class="progress-bar bg-info" role="progressbar" style="width: 50%">50%</div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-4">
+              Angiectasia
+            </div>
+            <div class="progress" style="width: 50%;">
+              <div class="progress-bar bg-warning" role="progressbar" style="width: 40%">40%</div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-4">
+              Angiectasia
+            </div>
+            <div class="progress" style="width: 50%;">
+              <div class="progress-bar bg" role="progressbar" style="width: 30.3%">30.3%</div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-4">
+              Angiectasia
+            </div>
+            <div class="progress" style="width: 50%;">
+              <div class="progress-bar bg-danger" role="progressbar" style="width: 20.4%">20.4%</div>
+            </div>
+          </div> -->
+        </div> 
+
+       </div> 
+  </div>
+
+  </div>
+
+  <div class="footer" style="height: 5%;vertical-align: middle;">
+      <p  style="font-size: 15px;margin-top: 10px;" >Project for CAP 6619 - Deep Learning by Monica Rajkumar (Fall 2021)</p>
+  </div>
+  
+
+   <!-- Modal -->
+   <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #299d9b;">
+          <h5 class="modal-title" style="color:white" id="exampleModalLabel">Image Classification</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="text-align: justify;">
+            Kvasir-Capusle Dataset 
+          <br><br>
+          <a target="_blank" href="https://paperswithcode.com/dataset/kvasir-capsule ">
+            Kvasir-Capusle
+          </a>
+          <br>
+          <a target="_blank" href="https://osf.io/dv2ag/">
+            OSFHome
+          </a>
+          <h4><a id="about" class="fa fa-github"  style="float: right;
+            margin-right: 20px; cursor: pointer; font-size: larger;" 
+            href="https://github.com/MonicaRaj/KvasirClassifier"; target="_blank"
+            title="GitHub"></a></h4>
+        </div>  
+   
+        <div class="modal-footer">
+          <button type="button" style="background-color: gray;" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
+
 </html>
