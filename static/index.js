@@ -54,7 +54,7 @@ async function getPred(img){
    
     let image = img;
     console.log(image)
-	let tensorImg = tf.browser.fromPixels(image).resizeNearestNeighbor([32, 32]).toFloat().div(tf.scalar(255)).expandDims();
+	let tensorImg = tf.browser.fromPixels(image).resizeNearestNeighbor([64, 64]).toFloat().div(tf.scalar(255)).expandDims();
     const predictions = await model.predict(tensorImg).data();
 	
 	// Get Top5
