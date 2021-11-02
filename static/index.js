@@ -82,7 +82,7 @@ async function getPred(img){
 
 async function loadModel() {
   model = undefined;
-  model = await tf.loadLayersModel("https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/cnn_model_e200/model.json");
+  model = await tf.loadLayersModel("https://raw.githubusercontent.com/MonicaRaj/KvasirClassifier/main/static/cnn_model_e200_64x64/model.json");
   console.log("model loaded")
 }
 loadModel();
